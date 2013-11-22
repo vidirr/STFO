@@ -37,7 +37,7 @@ def plotPic(Cs, Ls, alpha=1, lines=False, axes=False):
 		xlen = ylen = Ls[i]
 
 		if xmin < lowestx:
-			lowestx = xmin
+			lowestx = xmins
 
 		if ymin < lowesty:
 			lowesty = ymin
@@ -68,9 +68,6 @@ def plotPic(Cs, Ls, alpha=1, lines=False, axes=False):
         		P += line([(x + xlen, ymin), (x + xlen, ymax)], color='black')
 	
 	P.show(xmin=xmin-3, xmax=xmax+3, ymin=ymin-3, ymax=ymax+3, axes=axes)
-
-
-
 
 def mAp7(Cs, Ls):
 

@@ -69,8 +69,6 @@ def plotPic(Cs, Ls, alpha=1, lines=False, axes=False):
 	
 	P.show(xmin=xmin-3, xmax=xmax+3, ymin=ymin-3, ymax=ymax+3, axes=axes)
 
-
-
 def mAp6(Cs, Ls):
 
 	squares = []
