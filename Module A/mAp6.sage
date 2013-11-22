@@ -1,4 +1,4 @@
-
+#Helper functions
 class Square:
 
 	def __init__(self, xmin, ymin, length):
@@ -18,20 +18,19 @@ class Square:
 		if(self.ymin > other.ymax): return False #Other is below self
 		return True
 
-def gen_polygon(x_range, y_range):
+def gen_polygon(x_range, y_range, alpha):
 	xmin, xmax = x_range
 	ymin, ymax = y_range
 	lis = [ [xmin, ymin], [xmin, ymax], [xmax, ymax],  [xmax, ymin] ]
-	return polygon2d(lis, alpha=0.1)
+	return polygon2d(lis, alpha=alpha)
 
-def plotPic(Cs, Ls):
+def plotPic(Cs, Ls, alpha=1, lines=False, axes=False):
 
 	P = None
 	lowestx = 1000 
 	lowesty = 1000
 	highestx = -1000
 	highesty = -1000
-
 
 	for i in range(len(Cs)):
 		xmin, ymin = Cs[i]
@@ -49,34 +48,28 @@ def plotPic(Cs, Ls):
 		if ymin + ylen > highesty:
 			highesty = ymin + ylen
 
-
-		if P is None:
-			P = gen_polygon((xmin, xmin+xlen), (ymin, ymin+ylen))
-		else:
-			P += gen_polygon((xmin, xmin+xlen), (ymin, ymin+ylen))
-	
-
 	xmin = lowestx
 	xmax = highestx
 	ymin = lowesty
 	ymax = highesty
 
-	if (abs(lowestx) < highestx):
-		xmin = -highestx
-		xmax = highestx
-	else:
-		xmin = lowestx
-		xmax = abs(highestx)
+	for i in range(len(Cs)):
+		x, y = Cs[i]
+		xlen = ylen = Ls[i]
+
+		if P is None:
+			P = gen_polygon((x, x+xlen), (y, y+ylen), alpha)
+		else:
+			P += gen_polygon((x, x+xlen), (y, y+ylen), alpha)
+		if lines:
+        		P += line([(xmin, y), (xmax, y)], color='black') #Vertical
+        		P += line([(xmin, y+ylen), (xmax, y+ylen)], color='black') #Vertical
+        		P += line([(x, ymin), (x, ymax)], color='black')
+        		P += line([(x + xlen, ymin), (x + xlen, ymax)], color='black')
+	
+	P.show(xmin=xmin-3, xmax=xmax+3, ymin=ymin-3, ymax=ymax+3, axes=axes)
 
 
-	if (abs(lowesty) < highesty):
-		ymin = -highesty
-		ymax = highesty
-	else:
-		ymin = lowesty
-		ymax = abs(lowesty)
-
-	P.show(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
 
 def mAp6(Cs, Ls):
 
@@ -89,13 +82,12 @@ def mAp6(Cs, Ls):
 		length = Ls[i]
 		squares.append(Square(xmin, ymin, length))
 
-	#plotPic(Cs, Ls)
+	plotPic(Cs, Ls, alpha=0.3, lines=False, axes=True)
 
 	broken = False
 	#Select the first square from squares and start looking for neighbours.
 	connected.append(squares[0])
 	squares.remove(squares[0])
-
 
 	while len(squares) > 0:
 		found = False
@@ -110,4 +102,3 @@ def mAp6(Cs, Ls):
 			return False
 
 	return True
-

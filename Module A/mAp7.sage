@@ -1,4 +1,4 @@
-
+#Helper functions
 class Square:
 
 	def __init__(self, xmin, ymin, length):
@@ -18,13 +18,13 @@ class Square:
 		if(self.ymin > other.ymax): return False #Other is below self
 		return True
 
-def gen_polygon(x_range, y_range):
+def gen_polygon(x_range, y_range, alpha):
 	xmin, xmax = x_range
 	ymin, ymax = y_range
 	lis = [ [xmin, ymin], [xmin, ymax], [xmax, ymax],  [xmax, ymin] ]
-	return polygon2d(lis, alpha=1)
+	return polygon2d(lis, alpha=alpha)
 
-def plotPic(Cs, Ls):
+def plotPic(Cs, Ls, alpha=1, lines=False, axes=False):
 
 	P = None
 	lowestx = 1000 
@@ -58,16 +58,19 @@ def plotPic(Cs, Ls):
 		xlen = ylen = Ls[i]
 
 		if P is None:
-			P = gen_polygon((x, x+xlen), (y, y+ylen))
+			P = gen_polygon((x, x+xlen), (y, y+ylen), alpha)
 		else:
-			P += gen_polygon((x, x+xlen), (y, y+ylen))
-		
-		P += line([(xmin, y), (xmax, y)], color='black') #Vertical
-		P += line([(xmin, y+ylen), (xmax, y+ylen)], color='black') #Vertical
-		P += line([(x, ymin), (x, ymax)], color='black')
-		P += line([(x + xlen, ymin), (x + xlen, ymax)], color='black')
+			P += gen_polygon((x, x+xlen), (y, y+ylen), alpha)
+		if lines:
+        		P += line([(xmin, y), (xmax, y)], color='black') #Vertical
+        		P += line([(xmin, y+ylen), (xmax, y+ylen)], color='black') #Vertical
+        		P += line([(x, ymin), (x, ymax)], color='black')
+        		P += line([(x + xlen, ymin), (x + xlen, ymax)], color='black')
 	
-	P.show(xmin=xmin-3, xmax=xmax+3, ymin=ymin-3, ymax=ymax+3, axes=False)
+	P.show(xmin=xmin-3, xmax=xmax+3, ymin=ymin-3, ymax=ymax+3, axes=axes)
+
+
+
 
 def mAp7(Cs, Ls):
 
@@ -80,7 +83,7 @@ def mAp7(Cs, Ls):
 		length = Ls[i]
 		squares.append(Square(xmin, ymin, length))
 
-	plotPic(Cs, Ls)
+	plotPic(Cs, Ls, axes=True, alpha=0.8, lines=True)
 
 	broken = False
 	#Select the first square from squares and start looking for neighbours.
@@ -101,5 +104,3 @@ def mAp7(Cs, Ls):
 			return False
 
 	return True
-
-mAp7([(-2.0, 1.0), (-8.9, 2.7), (4.4, 2.6), (-5.5, -4.8), (-8.0, 1.2), (-8.3, 5.3), (8.4, -3.7), (4.9, 5.6), (3.3, 2.0), (-2.6, -3.0)], [5.9, 6.7, 7.2, 6.0, 5.2, 6.6, 6.8, 6.6, 6.6, 6.6])
