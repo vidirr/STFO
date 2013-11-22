@@ -130,8 +130,7 @@ class Cell:
 		#Count neighbours
 		for i in range(rmin, rmax):
 			for j in range(cmin, cmax):
-				if (i, j) in cells:
-					n += 1
+				
 		return n
 
 

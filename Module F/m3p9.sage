@@ -72,7 +72,7 @@ def m3p9(m=None):
 	w = m[0, 0]
 	n = Node(root, 0, 0, w)
 
-	frontier.put( (w, n) )
+	frontier.put( (w, n) )1
 	pqHash[n.hash()] = n
 
 
