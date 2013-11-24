@@ -1,4 +1,4 @@
-#Helper functions
+1#Helper functions
 class Square:
 
 	def __init__(self, xmin, ymin, length):

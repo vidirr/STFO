@@ -31,7 +31,6 @@ class Node:
 	def hash(self):
 		return (self.r, self.c)
 
-
 def generateNeighbours(node, m):
 
 	rmax = m.nrows() - _sage_const_1 
@@ -50,7 +49,6 @@ def generateNeighbours(node, m):
 	#Cell above of current cell
 
 	return neighbours
-
 
 def getMatrix():
 
@@ -101,7 +99,6 @@ def m3p9(m=None):
 					pqHash[n.hash()] = n
 					frontier.put( (n.weight, n) )
 
-
-
-ans = m3p9(None)
+ans = m3p9()
 print ans
+

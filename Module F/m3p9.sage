@@ -28,7 +28,6 @@ class Node:
 	def hash(self):
 		return (self.r, self.c)
 
-
 def generateNeighbours(node, m):
 
 	rmax = m.nrows() - 1
@@ -48,7 +47,6 @@ def generateNeighbours(node, m):
 
 	return neighbours
 
-
 def getMatrix():
 
 	alls = []
@@ -61,7 +59,7 @@ def m3p9(m=None):
 
 
 	if m is None:
-		m = egtMatrix()
+		m = getMatrix()
 
 	#Root of the tree - outside of the matrix.
 	root = Node(None, -1, -1, 0)
@@ -72,7 +70,7 @@ def m3p9(m=None):
 	w = m[0, 0]
 	n = Node(root, 0, 0, w)
 
-	frontier.put( (w, n) )1
+	frontier.put( (w, n) )
 	pqHash[n.hash()] = n
 
 
@@ -98,7 +96,6 @@ def m3p9(m=None):
 					pqHash[n.hash()] = n
 					frontier.put( (n.weight, n) )
 
-
-
-ans = m3p9(None)
+ans = m3p9()
 print ans
+
