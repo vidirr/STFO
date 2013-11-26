@@ -29,7 +29,7 @@ class Board:
 
 	def play(self):
 
-		self.findPossibleRevivals()
+		#self.findPossibleRevivals()
 
 		cells = self._aliveCells
 		for cell in cells:
@@ -130,19 +130,260 @@ class Cell:
 		#Count neighbours
 		for i in range(rmin, rmax):
 			for j in range(cmin, cmax):
-				
+				pass
 		return n
 
 
 def mDp4(m, k):
 
 	b = Board(m)
+	b.display()
 	for i in range(k):
 		print "Step: ", k + 1
 		print ""
-		b.display()
 		b.play()
+		b.display()
 
 
-m = Matrix([ [1, 0, 0], [0, 1, 0], [0, 0, 1] ])
-mDp4(m, 3)
+#m = Matrix([ [1, 0, 0], [0, 1, 0], [0, 0, 1] ])
+#mDp4(m, 1)
+
+
+def mDp2(m):
+
+	new = copy.copy(m)
+	for r in range(m.nrows()):
+		for c in range(m.ncols()):
+
+			rmin = (r - 1) if (r - 1 >= 0) else r
+			rmax = (r + 1) if (r + 1 < m.nrows()) else r
+			cmin = (c - 1) if (c - 1 >= 0) else c
+			cmax = (c + 1) if (c + 1 < m.ncols()) else c
+
+			count = 0
+			ncheck = 0
+			for i in range(rmin, rmax + 1):
+				for j in range(cmin, cmax + 1):
+					if(i, j) != (r, c):
+						ncheck += 1
+					if m[i, j] == 1 and (i, j) != (r, c):
+						count += 1
+
+			if count < 2:
+				new[r, c] = 0
+			elif count > 3:
+				new[r, c] = 0
+			elif count == 2 and m[r, c] == 1:
+				new[r, c] = 1
+			elif count == 3:
+				new[r, c] = 1
+
+	return new
+
+
+def mDp1(m, c):
+	m = mDp2(m)
+	r, c = c
+	return m[r, c]
+
+def mDp3(m, k):
+
+	for _ in range(k):
+		m = mDp2(m)
+	return m
+
+def mDp4(m, k):
+	memo = [False] * m.ncols()
+
+	def play(m):
+		new = copy.copy(m)
+		for r in range(m.nrows()):
+			for c in range(m.ncols()):
+
+				rcurr = r
+				ccurr = c
+
+				checked = 0
+				count = 0
+				for i in range(-1, 2):
+					if memo[i] == False:
+						continue
+					rcurr = (r + i)
+					if rcurr < 0:
+						continue
+					if rcurr == m.nrows():
+						continue
+					for j in range(-1, 2):
+						ccurr = (c + j)
+						if ccurr < 0:
+							continue
+						if ccurr == m.ncols():
+							continue
+						if m[rcurr, ccurr] == 1 and (rcurr, ccurr) != (r, c):
+							count += 1
+						if (rcurr, ccurr) != (r, c):
+							checked += 1
+
+
+
+
+
+
+				if count < 2:
+					new[r, c] = 0
+				elif count > 3:
+					new[r, c] = 0
+				elif count == 2 and m[r, c] == 1:
+					new[r, c] = 1
+					memo[r] = True
+				elif count == 3:
+					new[r, c] = 1
+					memo[r] = True
+
+
+
+		return new
+
+	for _ in range(k):
+		m = play(m)
+
+	return m
+
+def mDp5():
+	lis = [ \
+		matrix([ [0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0] ]), \
+		matrix([ [ 0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 1, 0] ]), \
+		matrix([  [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 1], [0, 0, 1, 0], ]), \
+		matrix([ [1, 1, 0], [1, 0, 1], [0, 1, 0] ]), \
+		matrix([ [0, 1, 0], [1, 0, 1], [0, 1, 0] ]), \
+		matrix([ [1, 1, 0], [1, 0, 1], [0, 1, 1] ]), \
+		matrix([ [1, 1, 0, 0], [1, 0, 0, 1], [0, 0, 1, 1]]), \
+		matrix([ [0, 1, 1, 0], [1, 0, 0, 1], [1, 0, 0, 1], [0, 1, 1, 0] ]), \
+		matrix([ [0, 1, 1, 0, 0], [1, 0, 0, 1, 0], [0, 1, 0, 0, 1], [0, 0, 1, 1, 0] ]), \
+		matrix([ [0, 0, 0, 1, 1], [0, 0, 1, 0, 1], [0, 0, 1, 0, 0], [1, 0, 1, 0, 0], [1, 1, 0, 0, 0] ]) \
+	]
+
+	return lis
+
+
+def mDp6():
+
+	lis = [ \
+		matrix([ [1, 1, 0, 0, 0], [1, 0, 1, 0, 0], [0, 0, 0, 0, 0], [0, 0, 1, 0, 1], [0, 0, 0, 1, 1] ]), \
+		matrix([ [0, 0, 0], [1, 1, 1], [0, 0, 0] ]), \
+		matrix([ [0, 0, 0, 0], [0, 1, 1, 1], [1, 1, 1, 0], [0, 0, 0, 0] ]), \
+		matrix([ [1, 1, 0, 0], [1, 1, 0, 0], [0, 0, 1, 1], [0, 0, 1, 1] ]), \
+		matrix([ [0, 0, 1, 0], [1, 0, 1, 0], [0, 1, 0, 1], [0, 1, 0, 0] ]) \
+	]
+
+	return lis
+
+def mDp7():
+
+	lis = [ \
+		matrix([ [1, 0, 0], [0, 1, 1], [1, 1, 0] ]), \
+		matrix([ [0, 0, 0, 1, 0, 0], [0, 1, 0, 0, 0, 1], [1, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 1], [1, 1, 1, 1, 1, 0] ]) \
+	]
+
+	return lis
+
+def mDp8(m, k):
+
+	def play(m):
+		new = copy.copy(m)
+		for r in range(m.nrows()):
+			for c in range(m.ncols()):
+
+				rcurr = r
+				ccurr = c
+
+				checked = 0
+				count = 0
+				for i in range(-1, 2):
+					rcurr = (r + i) % m.nrows()				
+					for j in range(-1, 2):
+						ccurr = (c + j) % m.ncols()
+						if m[rcurr, ccurr] == 1 and (rcurr, ccurr) != (r, c):
+							count += 1
+						if (rcurr, ccurr) != (r, c):
+							checked += 1
+
+
+
+
+
+
+				if count < 2:
+					new[r, c] = 0
+				elif count > 3:
+					new[r, c] = 0
+				elif count == 2 and m[r, c] == 1:
+					new[r, c] = 1
+				elif count == 3:
+					new[r, c] = 1
+
+
+
+		return new
+
+	for _ in range(k):
+		m = play(m)
+
+	return m
+
+def mDp9(m, k):
+
+	def play(m):
+
+		print "Before:"
+		print m
+
+		new = copy.copy(m)
+		for r in range(m.nrows()):
+			for c in range(m.ncols()):
+
+				rcurr = r
+				ccurr = c
+
+				checked = 0
+				count = 0
+				for i in range(-1, 2):
+					rcurr = (r + i) % m.nrows()				
+					for j in range(-1, 2):
+						#ccurr = (c + j) % m.ncols()
+						if c + j < 0:
+							ccurr = m.ncols() - 1 - c
+						if m[rcurr, ccurr] == 1 and (rcurr, ccurr) != (r, c):
+							count += 1
+						if (rcurr, ccurr) != (r, c):
+							checked += 1
+
+
+
+
+
+
+				if count < 2:
+					new[r, c] = 0
+				elif count > 3:
+					new[r, c] = 0
+				elif count == 2 and m[r, c] == 1:
+					new[r, c] = 1
+				elif count == 3:
+					new[r, c] = 1
+
+
+		print "After:"
+		print new
+		print "Correct:"
+		print matrix([[0,1,0,0,0],[0,0,0,1,0],[0,0,1,0,1],[1,1,0,0,0],[0,0,1,0,1]])
+		return new
+
+	for _ in range(k):
+		m = play(m)
+
+	return m
+
+a =  matrix([[0,0,0,0,0],[0,0,0,0,0],[0,0,1,1,1],[0,0,1,0,1],[0,0,1,1,1]])
+k = 1
+mDp9(a, k)

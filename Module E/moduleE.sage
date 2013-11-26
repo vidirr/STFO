@@ -23,25 +23,60 @@ def mEp3(x, y):
 			sum += 1
 	return sum
 
-def lev(x, lenx, y, leny):
-	if lenx == 0: 
-		return leny
-	if leny == 0: 
-		return lenx
-
-	if x[lenx - 1] == y[leny - 1]: 
-		cost = 0
-	else: 
-		cost = 1
-
-	return min( lev(x, lenx - 1, y, leny) + 1,\
-		        lev(x, lenx, y, leny - 1) + 1,\
-		        lev(x, lenx - 1 , y, leny - 1) + cost  \
-		      )
 
 def mEp4(x, y):
 
-	return lev(x, len(x), y, len(y))
+	#This is basically just a direct implementation
+	#of the "Iterative with full matrix" implementation
+	#on Wikipedia. 
+
+	if x == y:
+		return 0
+
+	m = len(x)
+	n = len(y)
+	mat = matrix(m + 1, n + 1)
+
+	for i in range(m):
+		mat[i, 0] = i
+
+	for j in range(n):
+		mat[0, j] = j
+
+
+	for j in range(1, n + 1):
+		for i in range(1, m + 1):
+			
+			if x[i-1] == y[j-1]:
+				mat[i, j] = mat[i-1, j-1]
+
+			else:
+				mat[i, j] = min(mat[i-1, j]+1, mat[i, j-1]+1, mat[i-1, j-1] +1)
+
+	ans = mat[m, n]
+	return ans
+
+
+def mEp5(x, y):
+	xm = []
+	ym = []
+	xcur = []
+	ycur = []
+
+	for i in range(len(x)):
+		xcur.append(x[i])
+		ycur.append(y[i])
+		if (i + 1) % sqrt(len(x)) == 0:
+			xm.append(xcur)
+			ym.append(ycur)
+			xcur = []
+			ycur = []
+
+	xm = matrix(xm)
+	ym = matrix(ym)
+
+	return (xm - ym).rank()
+
 
 
 def mEp6(L, dist):
